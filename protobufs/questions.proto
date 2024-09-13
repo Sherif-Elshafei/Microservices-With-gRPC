@@ -1,0 +1,74 @@
+/* This file contains definitions of entities
+as well as RPC that maybe used on passing messages.
+We will start by the simolest form then build up as we go
+*/
+
+/* Relationships are to be included here but we won't
+touch on that now at this moment.
+*/
+
+syntax = "proto3";
+
+/* the request has no body
+there is a type check in case there is a body
+*/
+
+message Question {
+    int32 question_id = 1;
+    string category = 2;
+    string difficulty_level =3;
+    bool is_MCQ =4;
+    float grade =5;
+}
+
+/* Request and response for GetAllQuestions*/
+message QuestionRequest {
+    }
+message QuestionResponse {
+    repeated Question questions =1 ;
+}
+
+/* Request and response for GetQuestionById*/
+message QuestionByIdRequest {
+	int32 question_id = 1;
+	}
+message QuestionByIdResponse {
+	Question question=1;
+}
+
+/* Request and response for PostQuestion*/
+message QuestionPostingRequest {
+	Question question=1;
+}
+message QuestionPostingResponse {
+	string posting_message=1;
+}
+
+/* Request and response for ModifyQuestion*/
+message QuestionEditingRequest {
+	int32 question_id = 1;
+	float grade =2;
+	}
+message QuestionEditingResponse {
+	string update_message=1;
+	}
+	
+/* Request and response for DeleteQuestion*/
+message QuestionDeleteRequest {
+	int32 question_id = 1;
+}
+message QuestionDeleteResponse {
+	string delete_message=1;
+}
+
+
+/* Here we put all the services that can be consumed in the microservice named "Questions" */
+
+service Questions {
+    rpc GetAllQuestions (QuestionRequest) returns (QuestionResponse);
+    rpc GetQuestionById (QuestionByIdRequest) returns (QuestionByIdResponse);
+    rpc PostQuestion (QuestionPostingRequest) returns (QuestionPostingResponse);
+    rpc ModifyQuestion (QuestionEditingRequest) returns (QuestionEditingResponse);
+    rpc DeleteQuestion (QuestionDeleteRequest) returns (QuestionDeleteResponse);
+}
+
